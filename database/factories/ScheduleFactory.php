@@ -20,7 +20,6 @@ class ScheduleFactory extends Factory
      */
     public function definition(): array
     {
-        
         return [
             'subject_id' => Subject::factory()->create()->id,
             'teacher_id' => User::factory()->create()->id,
