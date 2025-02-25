@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Group;
 use Illuminate\Http\Request;
 
-class GroupController
+class GroupController extends Controller
 {
     public function index(Request $request)
     {
@@ -55,5 +56,6 @@ class GroupController
     public function destroy(Group $group)
     {
         $group->delete();
+        return response()->json(['message' => 'Group deleted successfully']);
     }
 }

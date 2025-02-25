@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
-class SubjectController
+class SubjectController extends Controller
 {
     public function index(Request $request)
     {
@@ -51,7 +52,8 @@ class SubjectController
         $subject->update($validator);
         return response()->json(['message' => 'Subject Updated'], 200);
     }
-    public function delete(Subject $subject){
+    public function destroy(Subject $subject){
         $subject->delete();
+        return response()->json('Subject deleted successfully');
     }
 }
