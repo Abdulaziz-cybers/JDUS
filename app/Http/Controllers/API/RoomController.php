@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoomRequest;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -38,19 +39,15 @@ class RoomController extends Controller
     {
         return response()->json($room);
     }
-    public function store(Request $request)
+    public function store(RoomRequest $request)
     {
-        $validator = $request->validate([
-            'name' => 'required',
-        ]);
+        $validator = $request->validated();
         Room::query()->create($validator);
         return response()->json(['message' => 'Room created successfully']);
     }
-    public function update(Request $request, Room $room)
+    public function update(RoomRequest $request, Room $room)
     {
-        $validator = $request->validate([
-            'name' => 'required',
-        ]);
+        $validator = $request->validated();
         $room->update($validator);
         return response()->json(['message' => 'Room updated successfully']);
     }

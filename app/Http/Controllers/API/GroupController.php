@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use Illuminate\Http\Request;
+use App\Http\Requests\GroupRequest;
 
 class GroupController extends Controller
 {
@@ -37,19 +38,15 @@ class GroupController extends Controller
     public function show(Group $group){
         return response()->json($group);
     }
-    public function store(Request $request)
+    public function store(GroupRequest $request)
     {
-        $validator = $request->validate([
-            'name' => 'required',
-        ]);
+        $validator = $request->validated();
         Group::query()->create($validator);
         return response()->json(['message' => 'Group created successfully']);
     }
-    public function update(Request $request, Group $group)
+    public function update(GroupRequest $request, Group $group)
     {
-        $validator = $request->validate([
-            'name' => 'required',
-        ]);
+        $validator = $request->validated();
         $group->update($validator);
         return response()->json(['message' => 'Group updated successfully']);
     }

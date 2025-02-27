@@ -2,18 +2,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GroupSubjectRequest;
 use App\Models\Group;
 use Illuminate\Http\Request;
 
 class GroupSubjectController extends Controller
 {
     // Get all groups with their subjects
-    public function store(Request $request)
+    public function store(GroupSubjectRequest $request)
     {
-        $validator = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
-            'group_id' => 'required|exists:groups,id',
-        ]);
+        $validator = $request->validated();
         $user = Group::query()
             ->find($validator['group_id']);
         $user->subjects()->attach($validator['subject_id']);
@@ -21,12 +19,9 @@ class GroupSubjectController extends Controller
             'success' => true,
         ]);
     }
-    public function destroy(Request $request)
+    public function destroy(GroupSubjectRequest $request)
     {
-        $validator = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
-            'group_id' => 'required|exists:group,id',
-        ]);
+        $validator = $request->validated();
         $user = Group::query()
             ->find($validator['group_id']);
         $user->subjects()->detach($validator['subject_id']);

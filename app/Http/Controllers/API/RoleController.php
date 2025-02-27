@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoleRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -16,24 +17,21 @@ class RoleController extends Controller
     {
         return response()->json($role::with('users')->get());
     }
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $validator = $request->validate([
-            'name' => 'required|unique:roles,name',
-        ]);
+        $validator = $request->validated();
         Role::create($validator);
         return response()->json('Role created!');
     }
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
-        $validator = $request->validate([
-            'name' => 'required|unique:roles,name',
-        ]);
+        $validator = $request->validated();
         $role->update($validator);
-        return response()->json('Role updated!');
+        return response()->json(['message' => 'Role updated successfully', 'role' => $role]);
     }
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        Role::destroy($id);
+        $role->delete();
+        return response()->json('Role deleted!');
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SubjectTeacherRequest;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,12 +10,9 @@ use Illuminate\Http\Request;
 class SubjectTeacherController extends Controller
 {
     // Get all groups with their subjects
-    public function store(Request $request)
+    public function store(SubjectTeacherRequest $request)
     {
-        $validator = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $validator = $request->validated();
         $user = User::query()
             ->find($validator['user_id']);
         $user->subjects()->attach($validator['subject_id']);
@@ -22,12 +20,9 @@ class SubjectTeacherController extends Controller
             'success' => true,
         ]);
     }
-    public function destroy(Request $request)
+    public function destroy(SubjectTeacherRequest $request)
     {
-        $validator = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $validator = $request->validated();
         $user = User::query()
             ->find($validator['user_id']);
         $user->subjects()->detach($validator['subject_id']);
