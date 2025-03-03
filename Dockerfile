@@ -1,6 +1,7 @@
 FROM php:8.3-fpm
 
 WORKDIR /var/www
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
@@ -14,6 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxslt-dev \
     libpq-dev \
     libonig-dev \
+    libevent-dev \
+    libcurl4-openssl-dev \
+    libz-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-configure intl \
     && docker-php-ext-install \
@@ -23,12 +27,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         pdo_mysql \
         pdo_pgsql \
         intl \
+    && pecl install event pecl_http \
+    && docker-php-ext-enable event http \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . /var/www
-RUN composer install
+
 
