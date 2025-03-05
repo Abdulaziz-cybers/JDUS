@@ -4,20 +4,22 @@ ARG UID=1000
 ARG GID=1000
 
 # Modify existing www-data user and group to match host UID and GID
-RUN usermod -u ${UID} www-data && \
-    groupmod -g ${GID} www-data
+RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
 
-# Install only the essential system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl zip unzip \
-    libpng-dev libjpeg-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo mbstring zip bcmath \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Switch to a faster mirror for package installation
+RUN sed -i 's|http://deb.debian.org|http://ftp.debian.org|g' /etc/apt/sources.list
 
-# Retry mechanism for package installation (in case of network issues)
-RUN for i in 1 2 3; do apt-get update && apt-get install -y --no-install-recommends \
-    git curl zip unzip && break || sleep 5; done
+# Install system dependencies in separate steps for debugging
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends git curl zip unzip
+RUN apt-get install -y --no-install-recommends libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd pdo mbstring zip bcmath
+
+# Clean up APT cache to reduce image size
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -31,5 +33,6 @@ COPY . .
 RUN composer install --no-interaction --no-dev --optimize-autoloader || composer install --no-interaction --no-dev --optimize-autoloader
 
 # Set correct permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/w
+RUN chown -R www-data:www-data /var/www/html && chmod -R 775 /var/www/html/storage
+
+USER www-data
