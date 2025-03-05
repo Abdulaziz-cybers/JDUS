@@ -22,10 +22,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copy application code
-COPY . .
+COPY . ./var/www
 
-# Install dependencies efficiently
-RUN composer install --no-interaction --no-dev --optimize-autoloader || composer install --no-interaction --no-dev --optimize-autoloader
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html && chmod -R 775 /var/www/html/storage
