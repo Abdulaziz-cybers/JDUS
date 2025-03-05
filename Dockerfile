@@ -9,19 +9,11 @@ RUN usermod -u ${UID} www-data && \
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    curl \
-    zip \
-    unzip \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    libpq-dev \
-    libonig-dev \
+    git curl zip unzip libpng-dev libjpeg-dev libfreetype6-dev libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_pgsql mbstring zip bcmath \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # Retry mechanism for package installation (in case of network issues)
 RUN for i in 1 2 3; do apt-get update && apt-get install -y --no-install-recommends \
