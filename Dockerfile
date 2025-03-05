@@ -22,7 +22,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copy application code
-COPY . ./var/www
+COPY . .
 
 
 # Set correct permissions
