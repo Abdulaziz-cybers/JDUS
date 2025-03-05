@@ -14,8 +14,6 @@ RUN sed -i 's|http://deb.debian.org|http://ftp.debian.org|g' /etc/apt/sources.li
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl zip unzip \
     libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo mbstring zip bcmath \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
