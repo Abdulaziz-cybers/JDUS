@@ -7,7 +7,7 @@ ARG GID=1000
 RUN usermod -u ${UID} www-data && \
     groupmod -g ${GID} www-data
 
-# Install only necessary system dependencies and PHP extensions
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
@@ -17,15 +17,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
+    libpq-dev \
+    libonig-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-        gd \
-        pdo \
-        pdo_pgsql \
-        mbstring \
-        zip \
-        bcmath \
+    && docker-php-ext-install -j$(nproc) gd pdo pdo_pgsql mbstring zip bcmath \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Retry mechanism for package installation (in case of network issues)
+RUN for i in 1 2 3; do apt-get update && apt-get install -y --no-install-recommends \
+    git curl zip unzip && break || sleep 5; done
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -36,7 +36,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install dependencies efficiently
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+RUN composer install --no-interaction --no-dev --optimize-autoloader || composer install --no-interaction --no-dev --optimize-autoloader
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html \
