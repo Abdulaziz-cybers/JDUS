@@ -23,8 +23,8 @@ services:
             - ./:/var/www
         networks:
             - jdu_network
-        ports:
-            - "9090:9000"
+        expose:
+            - "9090"
 
     jdu_db:
         image: mysql
