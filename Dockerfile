@@ -26,8 +26,7 @@ COPY . ./var/www
 
 
 # Set correct permissions
-RUN mkdir -p /var/www/html/storage && \
-    chown -R www-data:www-data /var/www/html && \
+RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 775 /var/www/html/storage
 
 USER www-data
