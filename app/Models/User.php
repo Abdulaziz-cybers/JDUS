@@ -57,6 +57,6 @@ class User extends Authenticatable
     }
     public function subjects(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Subject::class);
+        return $this->belongsToMany(Subject::class,'subject_teacher','user_id','subject_id');
     }
 }

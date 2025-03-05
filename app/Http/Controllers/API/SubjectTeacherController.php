@@ -14,7 +14,7 @@ class SubjectTeacherController extends Controller
     {
         $validator = $request->validated();
         $user = User::query()
-            ->find($validator['user_id']);
+            ->find($validator['teacher_id']);
         $user->subjects()->attach($validator['subject_id']);
         return response()->json([
             'success' => true,
@@ -24,7 +24,7 @@ class SubjectTeacherController extends Controller
     {
         $validator = $request->validated();
         $user = User::query()
-            ->find($validator['user_id']);
+            ->find($validator['teacher_id']);
         $user->subjects()->detach($validator['subject_id']);
         return response()->json([
             'success' => true,

@@ -12,21 +12,15 @@ class GroupSubjectController extends Controller
     public function store(GroupSubjectRequest $request)
     {
         $validator = $request->validated();
-        $user = Group::query()
-            ->find($validator['group_id']);
+        $user = Group::query()->find($validator['group_id']);
         $user->subjects()->attach($validator['subject_id']);
-        return response()->json([
-            'success' => true,
-        ]);
+        return response()->json(['success' => true,]);
     }
     public function destroy(GroupSubjectRequest $request)
     {
         $validator = $request->validated();
-        $user = Group::query()
-            ->find($validator['group_id']);
+        $user = Group::query()->find($validator['group_id']);
         $user->subjects()->detach($validator['subject_id']);
-        return response()->json([
-            'success' => true,
-        ]);
+        return response()->json(['success' => true,]);
     }
 }

@@ -26,12 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('subjects', SubjectController::class);
     Route::resource('groups', GroupController::class);
     Route::resource('rooms', RoomController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('schedules', ScheduleController::class);
 
     Route::resource('group-members', GroupMemberController::class);
     Route::resource('group-subjects', GroupSubjectController::class);
     Route::resource('subject-teachers', SubjectTeacherController::class);
     Route::resource('role-users', RoleUserController::class);
-    Route::resource('roles', RoleController::class);
-    Route::resource('schedules', ScheduleController::class);
-
 });

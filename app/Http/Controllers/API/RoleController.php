@@ -15,13 +15,13 @@ class RoleController extends Controller
     }
     public function show(Role $role)
     {
-        return response()->json($role::with('users')->get());
+        return response()->json($role);
     }
     public function store(RoleRequest $request)
     {
         $validator = $request->validated();
         Role::create($validator);
-        return response()->json('Role created!');
+        return response()->json(['message'=>'Role created!']);
     }
     public function update(RoleRequest $request, Role $role)
     {
@@ -32,6 +32,6 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
-        return response()->json('Role deleted!');
+        return response()->json(['message' => 'Role deleted successfully']);
     }
 }

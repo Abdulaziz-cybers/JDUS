@@ -14,10 +14,11 @@ class Group extends Model
     ];
     public function subjects(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Subject::class);
+        return $this->belongsToMany(Subject::class, 'group_subjects', 'group_id', 'subject_id');
     }
-    public function students(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'group_members', 'group_id', 'user_id');
+
     }
 }
