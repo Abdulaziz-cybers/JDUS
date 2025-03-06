@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . /var/www
-RUN composer install
+RUN composer install --ignore-platform-req=ext-http
 
 RUN php artisan key:generate
 
