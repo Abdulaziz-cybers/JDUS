@@ -11,7 +11,6 @@ class GroupMemberController extends Controller
 {
     public function store(GroupMemberRequest $request)
     {
-        dd($request);
         $validator = $request->validated();
         $group = Group::query()->findOrFail($validator['group_id']);
         $group->users()->attach($validator['user_id']);

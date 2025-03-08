@@ -22,8 +22,8 @@ class SubjectTeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'subject_id'=>'required|exists:subjects,id',
-            'teacher_id'=>'required|exists:users,id',
+            'subject_id'=>'required|exists:subjects,id,',
+            'teacher_id'=>'required|exists:users,id,',
         ];
     }
 }

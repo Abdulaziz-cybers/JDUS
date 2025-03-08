@@ -42,7 +42,7 @@ class SubjectController extends Controller
     {
         $validator = $request->validated();
         Subject::query()->create($validator);
-        return response()->json('Subject created successfully');
+        return response()->json(['message'=>'Subject created successfully']);
     }
     public function update(SubjectRequest $request, Subject $subject){
         $validator = $request->validated();
@@ -51,6 +51,6 @@ class SubjectController extends Controller
     }
     public function destroy(Subject $subject){
         $subject->delete();
-        return response()->json('Subject deleted successfully');
+        return response()->json(['message'=>'Subject deleted successfully']);
     }
 }

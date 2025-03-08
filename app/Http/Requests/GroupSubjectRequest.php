@@ -22,8 +22,8 @@ class GroupSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'group_id' => 'required|exists:groups,id',
-            'subject_id' => 'required|exists:subjects,id',
+            'group_id' => 'required|exists:groups,id,',
+            'subject_id' => 'required|exists:subjects,id,',
         ];
     }
 }

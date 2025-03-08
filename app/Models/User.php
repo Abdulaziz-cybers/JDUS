@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
     public function groups(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class,'group_members','user_id','group_id');
     }
     public function subjects(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

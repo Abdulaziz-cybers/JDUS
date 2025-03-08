@@ -23,22 +23,22 @@ class StoreScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'subject_id' => 'required|exists:subjects,id',
+            'subject_id' => 'required|exists:subjects,id,',
             'user_id' => [
                 'required',
-                'exists:users,id',
+                'exists:users,id,',
                 Rule::unique('schedules', 'user_id')->where(fn($query) => $query->where('pair', $this->pair)
                     ->where('week_day', $this->week_day)->where('date', $this->date))
             ],
             'group_id' => [
                 'required',
-                'exists:groups,id',
+                'exists:groups,id,',
                 Rule::unique('schedules', 'group_id')->where(fn($query) => $query->where('pair', $this->pair)
                     ->where('week_day', $this->week_day)->where('date', $this->date))
             ],
             'room_id' => [
                 'required',
-                'exists:groups,id',
+                'exists:groups,id,',
                 Rule::unique('schedules', 'room_id')->where(fn($query) => $query->where('pair', $this->pair)
                     ->where('week_day', $this->week_day)->where('date', $this->date))
             ],
