@@ -21,7 +21,7 @@ jobs:
     - name: Update Dependencies
       run: composer update --ignore-platform-req=ext-http
     - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-req=ext-http
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
