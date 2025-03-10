@@ -42,44 +42,57 @@ jobs:
     needs: laravel-tests
     name: Deploy to AWS (EC2)
     runs-on: ubuntu-latest
+
     steps:
       - name: Ensure Docker is running
         run: |
           sudo systemctl start docker
           sudo systemctl enable docker
 
-      - name: executing remote ssh commands using private key
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            echo "Cleaning up disk space..."
+            echo "🛠 Cleaning up old Docker data..."
             sudo docker system prune -af
             sudo rm -rf /var/lib/docker/tmp/*
 
-            echo "Navigating to project folder..."
+            echo "🚀 Navigating to project folder..."
             cd /var/www/JDUS
 
-            echo "Setting permissions..."
+            echo "🔑 Setting permissions..."
             sudo chmod -R 777 storage bootstrap/cache
 
-            echo "Stopping current containers..."
+            echo "🛑 Stopping running containers..."
             sudo docker compose down
 
-            echo "Pulling latest changes..."
+            echo "📥 Pulling latest changes..."
             sudo git reset --hard
             sudo git pull origin main
 
-            echo "Building and starting containers..."
+            echo "🔄 Building and starting containers..."
             sudo docker compose up -d --build
             sleep 5
 
-            echo "Running migrations..."
+            echo "🛠 Checking container status..."
+            sudo docker ps -a
+
+            echo "🔍 Checking if application is listening on port 8050..."
+            sudo netstat -tulnp | grep 8050 || echo "⚠️ Port 8050 is not open!"
+
+            echo "🔓 Ensuring firewall allows port 8050..."
+            sudo ufw allow 8050
+            sudo ufw reload
+
+            echo "📌 Running migrations..."
             sudo docker exec jdu_app php artisan migrate --force
 
-            echo "Optimizing Laravel application..."
-            sudo docker exec jdu_app php artisan optimize
+            echo "⚡ Clearing Laravel cache..."
+            sudo docker exec jdu_app php artisan config:clear
+            sudo docker exec jdu_app php artisan cache:clear
+            sudo docker exec jdu_app php artisan route:clear
 
-            echo "Deployment completed successfully!"
+            echo "✅ Deployment completed successfully!"
